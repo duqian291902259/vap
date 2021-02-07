@@ -24,13 +24,13 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         // 启动UI界面
-        //new ToolUI().run();
+        new ToolUI().run();
 
         // java工具普通动画
-         animTool();
+         //animTool();
 
         // java工具融合动画
-        // animVapxTool();
+         //animVapxTool();
     }
 
 
@@ -91,7 +91,7 @@ public class Main {
         // bento4 mp4edit 命令路径
         commonArg.mp4editCmd = "mp4edit";
 
-        String path = "/path/to/your/demo";
+        String path = "D:\\DusanAndroid\\DusanVap\\tool\\simple_demo\\";
 
         commonArg.enableH265 = false;
         // fps
