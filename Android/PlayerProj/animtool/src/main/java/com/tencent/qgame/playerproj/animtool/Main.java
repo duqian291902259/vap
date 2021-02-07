@@ -24,10 +24,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         // 启动UI界面
-        new ToolUI().run();
+        //new ToolUI().run();
 
         // java工具普通动画
-        // animTool();
+         animTool();
 
         // java工具融合动画
         // animVapxTool();
@@ -70,7 +70,7 @@ public class Main {
         // fps
         commonArg.fps = 24;
         // 素材文件路径
-        commonArg.inputPath = "/path/to/your/demo";
+        commonArg.inputPath = "D:\\DusanAndroid\\DusanVap\\tool\\simple_demo\\";
         // alpha 区域缩放大小  (0.5 - 1)
         commonArg.scale = 0.5f;
 
