@@ -180,7 +180,7 @@ class MixAnimPlugin(val player: AnimPlayer): IAnimPlugin {
                     resultCall()
                 }
             } else if (src.srcType == Src.SrcType.TXT) {
-                ALog.i(TAG, "fetch txt ${src.srcId}")
+                ALog.i(TAG, "fetch txt ${src.txt}")
                 resourceRequest?.fetchText(Resource(src)) {
                     src.txt = it ?: ""
                     ALog.i(TAG, "fetch text ${src.srcId} finish txt is $it")

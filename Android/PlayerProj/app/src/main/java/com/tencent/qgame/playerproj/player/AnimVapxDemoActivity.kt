@@ -60,7 +60,9 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
     // 视频信息
     data class VideoInfo(val fileName: String, val md5: String)
 
-    private val videoInfo = VideoInfo("vapx.mp4", "f981e0f094ead842ad5ae99f1ffaa1a1")
+    //private val videoInfo = VideoInfo("vapx.mp4", "f981e0f094ead842ad5ae99f1ffaa1a1")
+    //private val videoInfo = VideoInfo("vapx-dq.mp4", "8b03ac63d57a14341242d5c629701e79")
+    private val videoInfo = VideoInfo("vapx-dq2.mp4", "19fdbeb986a78c925eed232a1daf0052")
 
     // 动画View
     private lateinit var animView: AnimView
@@ -99,7 +101,7 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
                  */
                 val srcTag = resource.tag
 
-                if (srcTag == "[sImg1]") { // 此tag是已经写入到动画配置中的tag
+                if (srcTag == "[tag1]") { // 此tag是已经写入到动画配置中的tag
                     val drawableId = if (head1Img) R.drawable.head1 else R.drawable.head2
                     head1Img = !head1Img
                     val options = BitmapFactory.Options()
@@ -114,10 +116,12 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
              * 获取文字资源
              */
             override fun fetchText(resource: Resource, result: (String?) -> Unit) {
-                val str = "恭喜 No.${1000 + Random().nextInt(8999)}用户 升神"
+                //val str = "恭喜 No.${1000 + Random().nextInt(8999)} 杜小菜 升神"
+                val str = "杜小菜 升神"
                 val srcTag = resource.tag
 
-                if (srcTag == "[sTxt1]") { // 此tag是已经写入到动画配置中的tag
+                //if (srcTag == "[tag1]") { // 此tag是已经写入到动画配置中的tag
+                if (srcTag == "tag1") {
                     result(str)
                 } else {
                     result(null)
