@@ -34,6 +34,7 @@ import com.tencent.qgame.animplayer.inter.OnResourceClickListener
 import com.tencent.qgame.animplayer.mix.Resource
 import com.tencent.qgame.animplayer.util.ALog
 import com.tencent.qgame.animplayer.util.IALog
+import com.tencent.qgame.playerproj.BuildConfig
 import com.tencent.qgame.playerproj.R
 import kotlinx.android.synthetic.main.activity_anim_simple_demo.*
 import java.io.File
@@ -62,7 +63,8 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
 
     //private val videoInfo = VideoInfo("vapx.mp4", "f981e0f094ead842ad5ae99f1ffaa1a1")
     //private val videoInfo = VideoInfo("vapx-dq.mp4", "8b03ac63d57a14341242d5c629701e79")
-    private val videoInfo = VideoInfo("vapx-dq2.mp4", "19fdbeb986a78c925eed232a1daf0052")
+    //private val videoInfo = VideoInfo("vapx-dq2.mp4", "19fdbeb986a78c925eed232a1daf0052")
+    private val videoInfo = VideoInfo("demo-2.mp4", "19fdbeb986a78c925eed232a1daf0052")
 
     // 动画View
     private lateinit var animView: AnimView
@@ -165,7 +167,7 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
         Thread {
             val file = File(dir + "/" + videoInfo.fileName)
             val md5 = FileUtil.getFileMD5(file)
-            if (videoInfo.md5 == md5) {
+            if (videoInfo.md5 == md5 || BuildConfig.DEBUG) {
                 // 开始播放动画文件
                 animView.startPlay(file)
             } else {

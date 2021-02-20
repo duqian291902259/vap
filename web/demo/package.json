@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "video-animation-player": "^0.1.8",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
