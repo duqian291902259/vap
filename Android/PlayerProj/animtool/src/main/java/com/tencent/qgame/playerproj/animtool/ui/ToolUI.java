@@ -203,7 +203,6 @@ public class ToolUI {
         });
         btnCreate.setEnabled(false);
         animTool.create(commonArg, true);
-
     }
 
     private void createUI() {

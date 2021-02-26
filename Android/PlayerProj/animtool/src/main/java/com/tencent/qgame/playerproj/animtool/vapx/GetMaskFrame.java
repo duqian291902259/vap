@@ -19,7 +19,7 @@ public class GetMaskFrame {
     private static final String TAG = "GetMaskFrame";
 
     public FrameSet.FrameObj getFrameObj(int frameIndex, CommonArg commonArg, int[] outputArgb) throws Exception {
-
+        TLog.i("dq-av","frameIndex="+frameIndex+",commonArg="+commonArg);
         FrameSet.FrameObj frameObj = new FrameSet.FrameObj();
         frameObj.frameIndex = frameIndex;
 

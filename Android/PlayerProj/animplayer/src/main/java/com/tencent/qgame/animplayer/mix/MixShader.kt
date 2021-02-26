@@ -32,6 +32,7 @@ class MixShader {
                 "    gl_Position = a_Position;\n" +
                 "}"
 
+        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.
         private const val FRAGMENT = "#extension GL_OES_EGL_image_external : require\n" +
                 "precision mediump float; \n" +
                 "uniform sampler2D u_TextureSrcUnit;\n" +

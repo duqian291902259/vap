@@ -18,40 +18,49 @@ package com.tencent.qgame.playerproj.animtool;
 
 import com.tencent.qgame.playerproj.animtool.ui.ToolUI;
 import com.tencent.qgame.playerproj.animtool.vapx.SrcSet;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class Main {
 
 
     public static void main(String[] args) throws Exception {
+        //dq:素材重命名工具
+        runRenameRes();
+
         // 启动UI界面
         new ToolUI().run();
 
         // java工具普通动画
-         //animTool();
+        //animTool();
 
         // java工具融合动画
-         //animVapxTool();
+        //animVapxTool();
+    }
+
+    private static void runRenameRes() {
+        String maskPath = "D:\\NetEase\\UI\\cc_mp4_pic\\mask";
+        String pngPath = "D:\\NetEase\\UI\\cc_mp4_pic\\png";
+        FileUtils.renameRes(maskPath,pngPath);
     }
 
 
     /**
-     *
      * 运行前请先安装ffmpeg与bento4这两个工具
-     *
-     * 生成图片的工具
-     * step 1 填写如下参数，运行后生成中间图片
-     * step 2 进入outputPath目录，运行如下ffmpeg命令（需要预先安装ffmpeng）
-     *
-     * h264
-     * ffmpeg -r 24 -i "%03d.png" -pix_fmt yuv420p -vcodec libx264 -b:v 3000k -profile:v main -level 4.0 -bf 0 -bufsize 3000k -y demo.mp4
-     *
-     * h265
-     * ffmpeg -r 24 -i "%03d.png" -pix_fmt yuv420p -vcodec libx265 -b:v 2000k -profile:v main -level 4.0 -bf 0 -bufsize 2000k -tag:v hvc1 -y demo.mp4
-     *
-     * 使用固定码率能使文件更小，但会损失清晰度
-     * 使用-crf 参数可以提高清晰度但文件大小不可控（会变大），推荐值 29（0 最好 51 最差）
-     *
-     *
+     * <p>
+     * 生成图片的工具 step 1 填写如下参数，运行后生成中间图片 step 2 进入outputPath目录，运行如下ffmpeg命令（需要预先安装ffmpeng）
+     * <p>
+     * h264 ffmpeg -r 24 -i "%03d.png" -pix_fmt yuv420p -vcodec libx264 -b:v 3000k -profile:v main -level 4.0 -bf 0
+     * -bufsize 3000k -y demo.mp4
+     * <p>
+     * h265 ffmpeg -r 24 -i "%03d.png" -pix_fmt yuv420p -vcodec libx265 -b:v 2000k -profile:v main -level 4.0 -bf 0
+     * -bufsize 2000k -tag:v hvc1 -y demo.mp4
+     * <p>
+     * 使用固定码率能使文件更小，但会损失清晰度 使用-crf 参数可以提高清晰度但文件大小不可控（会变大），推荐值 29（0 最好 51 最差）
+     * <p>
+     * <p>
      * ps: 项目是普通的java程序，需要在Run Configuration 里加入Application运行项目，并选择animtool项目，接下来按提示配置即可
      */
     public static void animTool() throws Exception {
@@ -107,7 +116,6 @@ public class Main {
         // src 设置
         commonArg.srcSet = getSrcSet(path);
 
-
         // 开始运行
         AnimTool animTool = new AnimTool();
         // needVideo true 直接生成video false 生成帧图片，由用户手动生成最终视频文件
@@ -128,7 +136,6 @@ public class Main {
             srcSet.srcs.add(src);
         }
 
-
         {
             SrcSet.Src src = new SrcSet.Src();
             src.srcPath = path + "mask2";
@@ -141,15 +148,11 @@ public class Main {
             srcSet.srcs.add(src);
         }
 
-
-
-
         return srcSet;
     }
 
     /**
-     * 生成对应的box bin
-     * 执行 mp4edit --insert :vapc.bin:1 demo_origin.mp4 demo_output.mp4 插入对应box
+     * 生成对应的box bin 执行 mp4edit --insert :vapc.bin:1 demo_origin.mp4 demo_output.mp4 插入对应box
      */
     private void mp4BoxTool(String inputFile, String outputPath) throws Exception {
         Mp4BoxTool mp4BoxTool = new Mp4BoxTool();

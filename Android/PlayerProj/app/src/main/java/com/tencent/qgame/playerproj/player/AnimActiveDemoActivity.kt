@@ -269,7 +269,7 @@ class AnimActiveDemoActivity : Activity(), IAnimListener {
                 if(maskBitmap == null || maskBitmap?.isRecycled != false || (maskBitmap?.width ?: 0) < width) {
                     maskBitmap = Bitmap.createBitmap(width.toInt(), width.toInt(), Bitmap.Config.ARGB_8888)
                 }
-                maskBitmap?.copyPixelsFromBuffer( ByteBuffer.wrap(resultBytes))
+                maskBitmap?.copyPixelsFromBuffer(ByteBuffer.wrap(resultBytes))
 
             }
         } catch (e: Exception) {

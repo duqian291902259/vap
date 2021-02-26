@@ -58,25 +58,27 @@ class MixRender(private val mixAnimPlugin: MixAnimPlugin) {
         if (videoTextureId <= 0) return
         val shader = this.shader ?: return
         shader.useProgram()
-        // 定点坐标
+        // 定点坐标，在那个区域绘制遮罩，渲染rect
         vertexArray.setArray(VertexUtil.create(config.width, config.height, frame.frame, vertexArray.array))
         vertexArray.setVertexAttribPointer(shader.aPositionLocation)
 
-        // src 纹理坐标
+        // src纹理坐标，genSrcCoordsArray取纹理的哪些部分,可以固定，基本上是1*1的区域
         srcArray.setArray(genSrcCoordsArray(srcArray.array, frame.frame.w, frame.frame.h, src.w, src.h, src.fitType))
         srcArray.setVertexAttribPointer(shader.aTextureSrcCoordinatesLocation)
-        // 绑定 src纹理
+
+        // mask纹理,对应视频中的位置，遮罩rect
+        maskArray.setArray(TexCoordsUtil.create(config.videoWidth, config.videoHeight, frame.mFrame, maskArray.array))
+        if (frame.mt == 90) {//旋转90°
+            maskArray.setArray(TexCoordsUtil.rotate90(maskArray.array))
+        }
+        maskArray.setVertexAttribPointer(shader.aTextureMaskCoordinatesLocation)
+
+        // 绑定src纹理，对应的文字或者图片生成的纹理id
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, src.srcTextureId)
         GLES20.glUniform1i(shader.uTextureSrcUnitLocation, 0)
 
-        // mask 纹理
-        maskArray.setArray(TexCoordsUtil.create(config.videoWidth, config.videoHeight, frame.mFrame, maskArray.array))
-        if (frame.mt == 90) {
-            maskArray.setArray(TexCoordsUtil.rotate90(maskArray.array))
-        }
-        maskArray.setVertexAttribPointer(shader.aTextureMaskCoordinatesLocation)
-        // 绑定 mask纹理
+        // 绑定mask所在的纹理，用的是视频帧的纹理id
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, videoTextureId)
         GLES20.glUniform1i(shader.uTextureMaskUnitLocation, 1)
