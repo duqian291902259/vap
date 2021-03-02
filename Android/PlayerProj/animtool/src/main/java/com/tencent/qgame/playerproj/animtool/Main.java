@@ -18,17 +18,13 @@ package com.tencent.qgame.playerproj.animtool;
 
 import com.tencent.qgame.playerproj.animtool.ui.ToolUI;
 import com.tencent.qgame.playerproj.animtool.vapx.SrcSet;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class Main {
 
 
     public static void main(String[] args) throws Exception {
         //dq:素材重命名工具
-        runRenameRes();
+        //runRenameRes();
 
         // 启动UI界面
         new ToolUI().run();

@@ -59,11 +59,12 @@ class CommonArgTool {
 
         // 帧图片生成路径
         commonArg.frameOutputPath = commonArg.outputPath + AnimTool.FRAME_IMAGE_DIR;
+        commonArg.scale = 1.0f;
 
         // srcId自动生成 & 融合动画路径检查 & z序
         if (commonArg.isVapx) {
             // vapx 强制缩小
-            commonArg.scale = 0.5f;
+            //commonArg.scale = 0.5f;
             int size = commonArg.srcSet.srcs.size();
             SrcSet.Src src;
             for (int i=0; i<size; i++) {
@@ -96,10 +97,14 @@ class CommonArgTool {
             TLog.e(TAG, "first frame 000.png does not exist");
             return false;
         }
-        // 获取视频高度
+        // 获取视频高度 752
         BufferedImage inputBuf = ImageIO.read(firstFrame);
-        commonArg.rgbPoint.w = inputBuf.getWidth();
-        commonArg.rgbPoint.h = inputBuf.getHeight();
+        final int width = inputBuf.getWidth();
+        final int height = inputBuf.getHeight();
+
+        float ratio = height*1.0f/width;
+        commonArg.rgbPoint.w = (int) (width *1.0f/2);
+        commonArg.rgbPoint.h = (int) (width*ratio*1.0f /2);
         if (commonArg.rgbPoint.w <= 0 || commonArg.rgbPoint.h <= 0) {
             TLog.e(TAG, "video size " + commonArg.rgbPoint.w + "x" + commonArg.rgbPoint.h);
             return false;

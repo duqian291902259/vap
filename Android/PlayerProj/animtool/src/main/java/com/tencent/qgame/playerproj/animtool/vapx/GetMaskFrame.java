@@ -65,8 +65,17 @@ public class GetMaskFrame {
         }
 
         BufferedImage inputBuf = ImageIO.read(inputFile);
-        int maskW = inputBuf.getWidth();
-        int maskH = inputBuf.getHeight();
+        ///Users/duqian/Development/MyGitHub/DusanVideo/DusanVap/tool/vapx_demo/png
+        //int maskW = inputBuf.getWidth();
+        //int maskH = inputBuf.getHeight();
+
+        final int width = inputBuf.getWidth();
+        final int height = inputBuf.getHeight();
+
+        float ratio = height * 1.0f / width;
+        int maskW = (int) (width * 1.0f / 2);
+        int maskH = (int) (width * ratio * 1.0f / 2);
+        TLog.i("dq-log", "maskW=" + maskW + ",maskH=" + maskH);
         int[] maskArgb = inputBuf.getRGB(0, 0, maskW, maskH, null, 0, maskW);
 
         FrameSet.Frame frame = new FrameSet.Frame();
