@@ -41,7 +41,7 @@ import javax.swing.SpinnerNumberModel;
 
 public class ToolUI {
 
-    private static final String TAG = "ToolUI";
+    private static final String TAG = "ToolUI-dq";
     private static final String PROPERTIES_FILE = "setting.properties";
     public static final int WIDTH = 900;
     public static final int HEIGHT = 700;
@@ -462,6 +462,7 @@ public class ToolUI {
     private void log(String tag, String msg) {
         txtAreaLog.append("[" + tag + "]:" + msg + "\n");
         txtAreaLog.setCaretPosition(txtAreaLog.getText().length());
+        System.out.println(tag+","+msg);
     }
 
 

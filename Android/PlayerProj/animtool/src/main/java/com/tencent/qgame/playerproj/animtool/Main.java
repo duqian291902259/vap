@@ -28,7 +28,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         //dq:素材重命名工具
-        runRenameRes();
+        //runRenameRes();
 
         // 启动UI界面
         new ToolUI().run();
@@ -79,7 +79,7 @@ public class Main {
         // fps
         commonArg.fps = 24;
         // 素材文件路径
-        commonArg.inputPath = "D:\\DusanAndroid\\DusanVap\\tool\\simple_demo\\";
+        commonArg.inputPath = "D:\\DusanAndroid\\DusanVap\\tool\\simple_demo";
         // alpha 区域缩放大小  (0.5 - 1)
         commonArg.scale = 0.5f;
 
@@ -100,13 +100,13 @@ public class Main {
         // bento4 mp4edit 命令路径
         commonArg.mp4editCmd = "mp4edit";
 
-        String path = "D:\\DusanAndroid\\DusanVap\\tool\\simple_demo\\";
+        String path = "D:\\DusanAndroid\\DusanVap\\tool\\vapx_demo\\";
 
         commonArg.enableH265 = false;
         // fps
         commonArg.fps = 24;
         // 素材文件路径
-        commonArg.inputPath = path + "video";
+        commonArg.inputPath = path + "png";
         // 启动融合动画
         commonArg.isVapx = true;
         if (commonArg.isVapx) {
@@ -128,15 +128,15 @@ public class Main {
 
         {
             SrcSet.Src src = new SrcSet.Src();
-            src.srcPath = path + "mask1";
+            src.srcPath = path + "mask";
             src.srcId = "1";
             src.srcType = SrcSet.Src.SRC_TYPE_IMG;
-            src.srcTag = "head1";
+            src.srcTag = "[sImg1]";
             src.fitType = SrcSet.Src.FIT_TYPE_CF;
             srcSet.srcs.add(src);
         }
 
-        {
+        /*{
             SrcSet.Src src = new SrcSet.Src();
             src.srcPath = path + "mask2";
             src.srcId = "2";
@@ -147,7 +147,7 @@ public class Main {
             src.style = SrcSet.Src.TEXT_STYLE_BOLD;
             srcSet.srcs.add(src);
         }
-
+        */
         return srcSet;
     }
 

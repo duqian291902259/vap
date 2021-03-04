@@ -16,6 +16,7 @@
 package com.tencent.qgame.animplayer
 
 import android.os.SystemClock
+import android.util.Log
 import com.tencent.qgame.animplayer.util.ALog
 import org.json.JSONObject
 import java.nio.charset.Charset
@@ -127,6 +128,9 @@ class AnimConfigManager(val player: AnimPlayer) {
 
         val json = String(vapcBuf, 0, vapcBuf.size, Charset.forName("UTF-8"))
         val jsonObj = JSONObject(json)
+
+        Log.d("dq-av","json=$json")
+
         config.jsonConfig = jsonObj
         val result = config.parse(jsonObj)
         if (defaultFps > 0) {

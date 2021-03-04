@@ -16,10 +16,10 @@ import javax.imageio.ImageIO;
  */
 public class GetMaskFrame {
 
-    private static final String TAG = "GetMaskFrame";
+    private static final String TAG = "GetMaskFrame-dq";
 
     public FrameSet.FrameObj getFrameObj(int frameIndex, CommonArg commonArg, int[] outputArgb) throws Exception {
-        TLog.i("dq-av","frameIndex="+frameIndex+",commonArg="+commonArg);
+        //TLog.i("dq-av","frameIndex="+frameIndex+",commonArg="+commonArg);
         FrameSet.FrameObj frameObj = new FrameSet.FrameObj();
         frameObj.frameIndex = frameIndex;
 
@@ -67,6 +67,8 @@ public class GetMaskFrame {
         BufferedImage inputBuf = ImageIO.read(inputFile);
         int maskW = inputBuf.getWidth();
         int maskH = inputBuf.getHeight();
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",maskW=" + maskW + ",maskH=" + maskH);
+
         int[] maskArgb = inputBuf.getRGB(0, 0, maskW, maskH, null, 0, maskW);
 
         FrameSet.Frame frame = new FrameSet.Frame();
@@ -74,6 +76,8 @@ public class GetMaskFrame {
         frame.z = src.z;
 
         frame.frame = getSrcFramePoint(maskArgb, maskW, maskH);
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
+
         if (frame.frame == null) {
             // 有文件，但内容是空
             return null;
@@ -86,7 +90,9 @@ public class GetMaskFrame {
             frame.frame.h
         );
 
-        PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
+        /*PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",maskPoint=" + maskPoint + ",mFrame1=" + mFrame);
+
         // 计算是否能放下遮罩
         if (mFrame.x + mFrame.w > outW) { // 超宽换行
             mFrame.x = startX;
@@ -114,15 +120,16 @@ public class GetMaskFrame {
             return null;
         }
         frame.mFrame = mFrame;
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",mFrame2=" + frame.mFrame);
 
         fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame);
-
+*/
         // 设置src的w,h 取所有遮罩里最大值
         synchronized (GetMaskFrame.class) {
             // 只按宽度进行判断防止横跳
             if (frame.frame.w > src.w) {
                 src.w = frame.frame.w;
-                src.h = frame.mFrame.h;
+                src.h = frame.frame.h;//dq-modified:不取mFrame里面的
             }
         }
         return frame;

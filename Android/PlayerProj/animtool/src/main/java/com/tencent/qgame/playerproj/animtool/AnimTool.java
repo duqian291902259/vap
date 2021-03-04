@@ -84,12 +84,12 @@ public class AnimTool {
                 TLog.i(TAG, "vapx error: src is empty");
                 return false;
             }
-            for (SrcSet.Src src : commonArg.srcSet.srcs) {
+            /*for (SrcSet.Src src : commonArg.srcSet.srcs) {
                 if (src.w <=0 || src.h <= 0) {
                     TLog.i(TAG, "vapx error: src.id=" + src.srcId + ",src.w=" + src.w + ",src.h=" + src.h);
                     return false;
                 }
-            }
+            }*/
         }
         return true;
     }
@@ -109,7 +109,7 @@ public class AnimTool {
 
         totalP = 0;
         finishThreadCount = 0;
-        final int threadNum = 16;
+        final int threadNum = 16;//16
 
         final int[][] threadIndexSet = new int[threadNum][2];
         final int totalFrame = commonArg.totalFrame;

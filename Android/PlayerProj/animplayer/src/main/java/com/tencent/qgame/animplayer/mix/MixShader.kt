@@ -32,7 +32,7 @@ class MixShader {
                 "    gl_Position = a_Position;\n" +
                 "}"
 
-        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.
+        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.取遮罩图片的颜色，遮罩的alpha值  srcRgba.a * maskRgba.r
         private const val FRAGMENT = "#extension GL_OES_EGL_image_external : require\n" +
                 "precision mediump float; \n" +
                 "uniform sampler2D u_TextureSrcUnit;\n" +
@@ -47,7 +47,7 @@ class MixShader {
                 "    vec4 maskRgba = texture2D(u_TextureMaskUnit, v_TextureMaskCoordinates);\n" +
                 "    float isFill = step(0.5, float(u_isFill));\n" +
                 "    vec4 srcRgbaCal = isFill * vec4(u_Color.r, u_Color.g, u_Color.b, srcRgba.a) + (1.0 - isFill) * srcRgba;\n" +
-                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgba.a * maskRgba.r);\n" +
+                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgba.a);\n" +
                 "}"
 
         // Uniform constants
