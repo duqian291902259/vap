@@ -10,10 +10,11 @@ import javax.imageio.ImageIO;
 /**
  * 构造参数
  */
-class CommonArgTool {
+public class CommonArgTool {
 
     private static final String TAG = "CommonArgTool";
     private static final int MIN_GAP = 4; // 元素最小间隙 防止编码与光栅化导致边界模糊问题
+    public static final float VIDEO_SCALE_RATIO = 0.6f; // 视频缩小的比例，防止视频宽高超出1504导致绿屏
 
     /**
      * 参数自动填充
@@ -63,7 +64,7 @@ class CommonArgTool {
         // srcId自动生成 & 融合动画路径检查 & z序
         if (commonArg.isVapx) {
             // vapx 强制缩小
-            commonArg.scale = 0.5f;
+            //commonArg.scale = 0.5f;
             int size = commonArg.srcSet.srcs.size();
             SrcSet.Src src;
             for (int i=0; i<size; i++) {
@@ -98,8 +99,10 @@ class CommonArgTool {
         }
         // 获取视频高度
         BufferedImage inputBuf = ImageIO.read(firstFrame);
-        commonArg.rgbPoint.w = inputBuf.getWidth();
-        commonArg.rgbPoint.h = inputBuf.getHeight();
+        int imgWidth = inputBuf.getWidth();
+        int imgHeight = inputBuf.getHeight();
+        commonArg.rgbPoint.w = (int) (imgWidth * VIDEO_SCALE_RATIO);
+        commonArg.rgbPoint.h = (int) (imgHeight * VIDEO_SCALE_RATIO);
         if (commonArg.rgbPoint.w <= 0 || commonArg.rgbPoint.h <= 0) {
             TLog.e(TAG, "video size " + commonArg.rgbPoint.w + "x" + commonArg.rgbPoint.h);
             return false;
@@ -108,9 +111,9 @@ class CommonArgTool {
         // 设置元素之间宽度
         commonArg.gap = MIN_GAP;
 
-        // 计算alpha区域大小
-        commonArg.alphaPoint.w = (int) (commonArg.rgbPoint.w * commonArg.scale);
-        commonArg.alphaPoint.h = (int) (commonArg.rgbPoint.h * commonArg.scale);
+        // 计算alpha区域大小 by dq:修改alpha视频区域大小，以适配cc视频素材
+        commonArg.alphaPoint.w = commonArg.rgbPoint.w ;//(int) (commonArg.rgbPoint.w * commonArg.scale);
+        commonArg.alphaPoint.h = commonArg.rgbPoint.h;//(int) (commonArg.rgbPoint.h * commonArg.scale);
 
         // 计算视频最佳方向 (最长边最小原则)
         int hW = commonArg.rgbPoint.w + commonArg.gap + commonArg.alphaPoint.w;

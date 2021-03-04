@@ -31,7 +31,7 @@ public class CommonArg {
 
     public String inputPath; // 输入帧文件地址
 
-    public float scale = 0.5f; // alpha 区域缩放大小
+    public float scale = 1.0f; // alpha 区域缩放大小，不缩小
 
     public int bitrate = 2000; // 码率
 

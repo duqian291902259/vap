@@ -19,6 +19,8 @@ import com.tencent.qgame.playerproj.animtool.vapx.FrameSet;
 import com.tencent.qgame.playerproj.animtool.vapx.GetMaskFrame;
 import com.tencent.qgame.playerproj.animtool.vapx.SrcSet;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
@@ -84,6 +86,7 @@ public class AnimTool {
                 TLog.i(TAG, "vapx error: src is empty");
                 return false;
             }
+            //by dq:不校验遮罩透明区域的位置
             /*for (SrcSet.Src src : commonArg.srcSet.srcs) {
                 if (src.w <=0 || src.h <= 0) {
                     TLog.i(TAG, "vapx error: src.id=" + src.srcId + ",src.w=" + src.w + ",src.h=" + src.h);
@@ -181,6 +184,7 @@ public class AnimTool {
             TLog.i(TAG, "frameIndex="+frameIndex +" is empty");
             return;
         }
+
         // 最后保存图片
         BufferedImage outBuf = new BufferedImage(commonArg.outputW, commonArg.outputH, BufferedImage.TYPE_INT_ARGB);
         outBuf.setRGB(0,0, commonArg.outputW, commonArg.outputH, videoFrame.argb, 0, commonArg.outputW);
@@ -188,7 +192,6 @@ public class AnimTool {
         File outputFile = new File(commonArg.frameOutputPath + String.format("%03d", frameIndex) +".png");
         ImageIO.write(outBuf, "PNG", outputFile);
     }
-
 
     private void checkDir(String path) {
         File file = new File(path);

@@ -17,6 +17,8 @@ package com.tencent.qgame.playerproj.animtool;
 
 import com.tencent.qgame.playerproj.animtool.data.PointRect;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import javax.imageio.ImageIO;
 
 import java.awt.geom.AffineTransform;
@@ -49,9 +51,20 @@ public class GetAlphaFrame {
         int outW = commonArg.outputW;
         int outH = commonArg.outputH;
 
-        BufferedImage inputBuf = ImageIO.read(inputFile);
+        //BufferedImage inputBuf = ImageIO.read(inputFile);
+        //int[] inputArgb = inputBuf.getRGB(0, 0, w, h, null, 0, w);
+
+        //by dq:缩小原图片
+        //定义一个BufferedImage对象，用于保存缩小后的位图
+        BufferedImage inputBuf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = inputBuf.getGraphics();
+        //读取原始位图
+        Image srcImage = ImageIO.read(inputFile);
+        //将原始位图缩小后绘制到bufferedImage对象中
+        graphics.drawImage(srcImage, 0, 0,  w, h, null);
         int[] inputArgb = inputBuf.getRGB(0, 0, w, h, null, 0, w);
 
+        //by dq:以上是缩小图片的方式
         int[] outputArgb = new int[outW * outH];
         Arrays.fill(outputArgb, 0xff000000);
 
@@ -77,6 +90,22 @@ public class GetAlphaFrame {
 
         return new AlphaFrameOut(outputArgb);
 
+    }
+
+    /**
+     * 缩放图片
+     */
+    private int[] scaleImage(float scale, BufferedImage inputBuf) {
+        AffineTransform at = new AffineTransform();
+        at.scale(scale, scale);
+
+        int w = inputBuf.getWidth();
+        int h = inputBuf.getHeight();
+        BufferedImage alphaBuf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        alphaBuf = scaleOp.filter(inputBuf, alphaBuf);
+
+        return alphaBuf.getRGB(0, 0, w, h, null, 0, w);
     }
 
 

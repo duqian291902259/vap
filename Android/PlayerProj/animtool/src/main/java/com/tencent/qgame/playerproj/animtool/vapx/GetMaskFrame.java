@@ -1,6 +1,7 @@
 package com.tencent.qgame.playerproj.animtool.vapx;
 
 import com.tencent.qgame.playerproj.animtool.CommonArg;
+import com.tencent.qgame.playerproj.animtool.CommonArgTool;
 import com.tencent.qgame.playerproj.animtool.TLog;
 import com.tencent.qgame.playerproj.animtool.data.PointRect;
 
@@ -82,15 +83,22 @@ public class GetMaskFrame {
             // 有文件，但内容是空
             return null;
         }
+        //等比例缩小遮罩的坐标位置
+        frame.frame.x = (int) (frame.frame.x * CommonArgTool.VIDEO_SCALE_RATIO);
+        frame.frame.y = (int) (frame.frame.y * CommonArgTool.VIDEO_SCALE_RATIO);
+        frame.frame.w = (int) (frame.frame.w * CommonArgTool.VIDEO_SCALE_RATIO);
+        frame.frame.h = (int) (frame.frame.h * CommonArgTool.VIDEO_SCALE_RATIO);
 
-        PointRect maskPoint = new PointRect(
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
+
+        /*PointRect maskPoint = new PointRect(
             frame.frame.x,
             frame.frame.y,
             frame.frame.w,
             frame.frame.h
         );
 
-        /*PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
+        PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
         TLog.i(TAG, "frameIndex=" + frameIndex + ",maskPoint=" + maskPoint + ",mFrame1=" + mFrame);
 
         // 计算是否能放下遮罩
