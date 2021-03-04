@@ -172,7 +172,7 @@ public class GetMaskFrame {
         int maxY = 0;
         for (int y=0; y<h; y++) {
             for (int x = 0; x < w; x++) {
-                int alpha = maskArgb[x + y*w] >>> 24;
+                int alpha = maskArgb[x + y*w] >>> 24;// TODO-DQ: 2021/3/4 取遮罩的透明度信息
                 if (alpha > 0) {
                     if (x < minX) minX = x;
                     if (y < minY) minY = y;

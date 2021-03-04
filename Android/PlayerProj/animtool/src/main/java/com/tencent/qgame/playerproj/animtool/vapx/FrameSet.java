@@ -63,7 +63,6 @@ public class FrameSet {
         public PointRect frame = new PointRect(); // src位置
         public PointRect mFrame = new PointRect(); // 遮罩区域
 
-
         @Override
         public String toString() {
 
