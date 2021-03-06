@@ -28,7 +28,7 @@ class Frame(val index: Int, json: JSONObject) {
     var frame: PointRect
     var mFrame: PointRect
     var mt = 0 // 遮罩旋转角度v2 版本只支持 0 与 90度
-    var mAlpha = 0 //遮罩的alpha值，0-255传递，后面转换下
+    var mAlpha = 0.0 //遮罩的alpha值，0-255传递，后面转换下
 
     init {
         srcId = json.getString("srcId")
@@ -41,7 +41,7 @@ class Frame(val index: Int, json: JSONObject) {
         mFrame = PointRect(m.getInt(0), m.getInt(1), m.getInt(2), m.getInt(3))
 
         mt = json.getInt("mt")
-        mAlpha = json.getInt("mAlpha")
+        mAlpha = json.getDouble("mAlpha")
     }
 }
 

@@ -94,14 +94,12 @@ class MixRender(private val mixAnimPlugin: MixAnimPlugin) {
             GLES20.glUniform4f(shader.uColorLocation, 0f, 0f, 0f, 0f)
         }
 
-        //by dq:传递每一帧的遮罩透明度给片元着色器
-        var mAlpha = 0f
-        if (frame.mAlpha in 0..255) {
-            mAlpha = frame.mAlpha * 1.0f / 255+0.6f
+        //by dq:传递每一帧的遮罩透明度给片元着色器,todo-dq 透明度信息不完善，没法玩
+        val mAlpha = frame.mAlpha
+        Log.d("dq-av", "mask alpha=$mAlpha")
+        if (mAlpha > 0) {
+            GLES20.glUniform1f(shader.uMaskAlphaLocation, mAlpha.toFloat())
         }
-        Log.d("dq-av","mask alpha=$mAlpha")
-        GLES20.glUniform1f(shader.uMaskAlphaLocation, mAlpha)
-
 
         GLES20.glEnable(GLES20.GL_BLEND)
         // 基于源象素alpha通道值的半透明混合函数

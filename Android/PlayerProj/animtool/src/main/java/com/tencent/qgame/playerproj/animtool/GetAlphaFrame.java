@@ -70,7 +70,7 @@ public class GetAlphaFrame {
 
         BufferedImage alphaBuf = inputBuf;
         int[] alphaArgb = inputArgb;
-
+        //右边视频部分
         if (commonArg.scale < 1f) {
             AffineTransform at = new AffineTransform();
             at.scale(commonArg.scale, commonArg.scale);

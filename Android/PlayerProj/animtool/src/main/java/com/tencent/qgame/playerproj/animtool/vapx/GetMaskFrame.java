@@ -69,7 +69,7 @@ public class GetMaskFrame {
         BufferedImage inputBuf = ImageIO.read(inputFile);
         int maskW = inputBuf.getWidth();
         int maskH = inputBuf.getHeight();
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",maskW=" + maskW + ",maskH=" + maskH);
+        //TLog.i(TAG, "frameIndex=" + frameIndex + ",maskW=" + maskW + ",maskH=" + maskH);
 
         int[] maskArgb = inputBuf.getRGB(0, 0, maskW, maskH, null, 0, maskW);
 
@@ -78,7 +78,7 @@ public class GetMaskFrame {
         frame.z = src.z;
 
         frame.frame = getSrcFramePoint(maskArgb, maskW, maskH,frame);
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame+",mAlpha="+frame.mAlpha);
+        //TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame+",mAlpha="+frame.mAlpha);
 
         if (frame.frame == null) {
             // 有文件，但内容是空
@@ -90,9 +90,9 @@ public class GetMaskFrame {
         frame.frame.w = (int) (frame.frame.w * CommonArgTool.VIDEO_SCALE_RATIO);
         frame.frame.h = (int) (frame.frame.h * CommonArgTool.VIDEO_SCALE_RATIO);
 
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
+        //TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
 
-        /*PointRect maskPoint = new PointRect(
+        PointRect maskPoint = new PointRect(
             frame.frame.x,
             frame.frame.y,
             frame.frame.w,
@@ -100,8 +100,9 @@ public class GetMaskFrame {
         );
 
         PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",maskPoint=" + maskPoint + ",mFrame1=" + mFrame);
+        //TLog.i(TAG, "frameIndex=" + frameIndex + ",maskPoint=" + maskPoint + ",mFrame1=" + mFrame);
 
+        /*
         // 计算是否能放下遮罩
         if (mFrame.x + mFrame.w > outW) { // 超宽换行
             mFrame.x = startX;
@@ -129,10 +130,11 @@ public class GetMaskFrame {
             return null;
         }
         frame.mFrame = mFrame;
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",mFrame2=" + frame.mFrame);
+        */
+        //TLog.i(TAG, "frameIndex=" + frameIndex + ",mFrame2=" + frame.mFrame);
 
-        fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame);
-*/
+        fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame,frame);
+
         // 设置src的w,h 取所有遮罩里最大值
         synchronized (GetMaskFrame.class) {
             // 只按宽度进行判断防止横跳
@@ -173,12 +175,16 @@ public class GetMaskFrame {
         int maxX = 0;
         int maxY = 0;
 
+        int maskColor = 0;
         for (int y=0; y<h; y++) {
             for (int x = 0; x < w; x++) {
                 int alpha = maskArgb[x + y*w] >>> 24;
+                /*if (maskColor==0){
+                    maskColor = getAlpha(alpha);
+                }*/
                 if (alpha > 0) {
                     //by-dq:假设有透明度变化，遮罩的透明度必须一致，只取一个透明度
-                    frame.mAlpha = alpha;
+                    //frame.mAlpha = alpha;
 
                     if (x < minX) minX = x;
                     if (y < minY) minY = y;
@@ -187,6 +193,11 @@ public class GetMaskFrame {
                 }
             }
         }
+        //取到的颜色值都是-16777216？
+        /*float[] transColor = transColor(maskColor);
+        float alpha1 = transColor[0];
+        float alpha2 = transColor[1];
+        TLog.i("dq-av", "maskColor1=" + maskColor + ",alpha=" + alpha1 + ",alpha2=" + alpha2);*/
 
         point.x = minX;
         point.y = minY;
@@ -198,11 +209,20 @@ public class GetMaskFrame {
 
     }
 
+    private int getAlpha(int color) {
+        //int alpha = color >>> 24;
+        int alpha =color;
+        // r = g = b
+        return 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
+    }
+
 
     private void fillMaskToOutput(int[] outputArgb, int outW,
-                                  int[] maskArgb, int maskW,
-                                  PointRect frame,
-                                  PointRect mFrame) {
+        int[] maskArgb, int maskW,
+        PointRect frame,
+        PointRect mFrame, Frame frame1) {
+        int maskColor2 = 0;
+
         for (int y=0; y < frame.h; y++) {
             for (int x=0; x < frame.w; x++) {
                 int maskXOffset = frame.x;
@@ -216,13 +236,26 @@ public class GetMaskFrame {
                 alpha = (int) ((redAlpha / 255f) * (alpha / 255f) * 255f);
                 // 最终color
                 int color = 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
-
+                maskColor2 = color;
                 // 将遮罩颜色放置到视频中对应区域
-                int outputXOffset = mFrame.x;
+                /*int outputXOffset = mFrame.x;
                 int outputYOffset = mFrame.y;
-                outputArgb[x + outputXOffset + (y + outputYOffset) * outW] = color;
+                outputArgb[x + outputXOffset + (y + outputYOffset) * outW] = color;*/
             }
         }
+        float[] transColor = transColor(maskColor2);
+        float alpha1 = transColor[1];
+        float alpha2 = transColor[2];
+        float alpha3 = transColor[3];
+        TLog.i("dq-av", "maskColor2=" + maskColor2 + ",alpha=" + alpha1 + ",alpha2=" + alpha2 + ",alpha3=" + alpha3);
+        //frame1.mAlpha = (int) (alpha1*255);
+        frame1.mAlpha = alpha1;
     }
 
+
+    private final float[] transColor(int color) {
+        float[] argb = new float[]{(float) (color >>> 24 & 255) / 255.0F, (float) (color >>> 16 & 255) / 255.0F,
+            (float) (color >>> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F};
+        return argb;
+    }
 }
