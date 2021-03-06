@@ -25,6 +25,7 @@ import java.util.Locale;
 
 public class Main {
 
+    //D:\NetEase\UI\cc_mp4_pic\png      C:\Users\N20241\Pictures\vapx_demo\png
 
     public static void main(String[] args) throws Exception {
         //dq:素材重命名工具

@@ -32,12 +32,14 @@ class MixShader {
                 "    gl_Position = a_Position;\n" +
                 "}"
 
-        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.取遮罩图片的颜色，遮罩的alpha值  srcRgba.a * maskRgba.r,todo-dq 因为缺少了遮罩的透明度信息，所以可以在视频的argb通道里面存储遮罩的透明度信息
+        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.取遮罩图片的颜色，遮罩的alpha值:1--> srcRgba.a * maskRgba.r,  2-->srcRgbaCal.a  3,srcRgba.a *  todo-dq 因为缺少了遮罩的透明度信息，所以可以在视频的argb通道里面存储遮罩的透明度信息
+        //头像纹理srcRgba，遮罩纹理（视频右边部分的遮罩），文字颜色填充有rgb
         private const val FRAGMENT = "#extension GL_OES_EGL_image_external : require\n" +
                 "precision mediump float; \n" +
                 "uniform sampler2D u_TextureSrcUnit;\n" +
                 "uniform samplerExternalOES u_TextureMaskUnit;\n" +
                 "uniform int u_isFill;\n" +
+                "uniform float u_mask_alpha;\n" +
                 "uniform vec4 u_Color;\n" +
                 "varying vec2 v_TextureSrcCoordinates;\n" +
                 "varying vec2 v_TextureMaskCoordinates;\n" +
@@ -47,7 +49,7 @@ class MixShader {
                 "    vec4 maskRgba = texture2D(u_TextureMaskUnit, v_TextureMaskCoordinates);\n" +
                 "    float isFill = step(0.5, float(u_isFill));\n" +
                 "    vec4 srcRgbaCal = isFill * vec4(u_Color.r, u_Color.g, u_Color.b, srcRgba.a) + (1.0 - isFill) * srcRgba;\n" +
-                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgbaCal.a);\n" +
+                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgbaCal.a*u_mask_alpha);\n" +
                 "}"
 
         // Uniform constants
@@ -55,6 +57,7 @@ class MixShader {
         private const val U_TEXTURE_MASK_UNIT = "u_TextureMaskUnit"
         private const val U_IS_FILL = "u_isFill"
         private const val U_COLOR = "u_Color"
+        private const val U_MASK_ALPHA = "u_mask_alpha" //新增遮罩的alpha传递
 
         // Attribute constants
         private const val A_POSITION = "a_Position"
@@ -70,6 +73,7 @@ class MixShader {
     val uTextureMaskUnitLocation: Int
     val uIsFillLocation: Int
     val uColorLocation: Int
+    val uMaskAlphaLocation: Int
 
     // Attribute locations
     val aPositionLocation: Int
@@ -82,6 +86,7 @@ class MixShader {
         uTextureMaskUnitLocation = GLES20.glGetUniformLocation(program, U_TEXTURE_MASK_UNIT)
         uIsFillLocation = GLES20.glGetUniformLocation(program, U_IS_FILL)
         uColorLocation = GLES20.glGetUniformLocation(program, U_COLOR)
+        uMaskAlphaLocation = GLES20.glGetUniformLocation(program, U_MASK_ALPHA)
 
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION)
         aTextureSrcCoordinatesLocation = GLES20.glGetAttribLocation(program, A_TEXTURE_SRC_COORDINATES)

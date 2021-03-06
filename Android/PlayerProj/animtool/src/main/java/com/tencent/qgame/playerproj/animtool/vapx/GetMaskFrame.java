@@ -5,6 +5,7 @@ import com.tencent.qgame.playerproj.animtool.CommonArgTool;
 import com.tencent.qgame.playerproj.animtool.TLog;
 import com.tencent.qgame.playerproj.animtool.data.PointRect;
 
+import com.tencent.qgame.playerproj.animtool.vapx.FrameSet.Frame;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -76,8 +77,8 @@ public class GetMaskFrame {
         frame.srcId = src.srcId;
         frame.z = src.z;
 
-        frame.frame = getSrcFramePoint(maskArgb, maskW, maskH);
-        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
+        frame.frame = getSrcFramePoint(maskArgb, maskW, maskH,frame);
+        TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame+",mAlpha="+frame.mAlpha);
 
         if (frame.frame == null) {
             // 有文件，但内容是空
@@ -162,7 +163,8 @@ public class GetMaskFrame {
     /**
      * 获取遮罩位置信息 并转换为黑白
      */
-    private PointRect getSrcFramePoint(int[] maskArgb, int w, int h) {
+    private PointRect getSrcFramePoint(int[] maskArgb, int w, int h,
+        Frame frame) {
 
         PointRect point = new PointRect();
 
@@ -170,10 +172,14 @@ public class GetMaskFrame {
         int minY = Integer.MAX_VALUE;
         int maxX = 0;
         int maxY = 0;
+
         for (int y=0; y<h; y++) {
             for (int x = 0; x < w; x++) {
-                int alpha = maskArgb[x + y*w] >>> 24;// TODO-DQ: 2021/3/4 取遮罩的透明度信息
+                int alpha = maskArgb[x + y*w] >>> 24;
                 if (alpha > 0) {
+                    //by-dq:假设有透明度变化，遮罩的透明度必须一致，只取一个透明度
+                    frame.mAlpha = alpha;
+
                     if (x < minX) minX = x;
                     if (y < minY) minY = y;
                     if (x > maxX) maxX = x;
@@ -215,7 +221,6 @@ public class GetMaskFrame {
                 int outputXOffset = mFrame.x;
                 int outputYOffset = mFrame.y;
                 outputArgb[x + outputXOffset + (y + outputYOffset) * outW] = color;
-
             }
         }
     }

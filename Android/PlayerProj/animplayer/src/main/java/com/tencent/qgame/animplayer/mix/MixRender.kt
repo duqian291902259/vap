@@ -19,6 +19,7 @@ import android.graphics.Bitmap
 import android.opengl.GLES11Ext
 import android.opengl.GLES20
 import android.opengl.GLUtils
+import android.util.Log
 import com.tencent.qgame.animplayer.AnimConfig
 import com.tencent.qgame.animplayer.Constant
 import com.tencent.qgame.animplayer.PointRect
@@ -66,7 +67,7 @@ class MixRender(private val mixAnimPlugin: MixAnimPlugin) {
         srcArray.setArray(genSrcCoordsArray(srcArray.array, frame.frame.w, frame.frame.h, src.w, src.h, src.fitType))
         srcArray.setVertexAttribPointer(shader.aTextureSrcCoordinatesLocation)
 
-        // mask纹理,对应视频中的位置，遮罩rect
+        // mask对应视频中的位置，遮罩rect
         maskArray.setArray(TexCoordsUtil.create(config.videoWidth, config.videoHeight, frame.mFrame, maskArray.array))
         if (frame.mt == 90) {//旋转90°
             maskArray.setArray(TexCoordsUtil.rotate90(maskArray.array))
@@ -92,6 +93,15 @@ class MixRender(private val mixAnimPlugin: MixAnimPlugin) {
             GLES20.glUniform1i(shader.uIsFillLocation,  0)
             GLES20.glUniform4f(shader.uColorLocation, 0f, 0f, 0f, 0f)
         }
+
+        //by dq:传递每一帧的遮罩透明度给片元着色器
+        var mAlpha = 0f
+        if (frame.mAlpha in 0..255) {
+            mAlpha = frame.mAlpha * 1.0f / 255+0.6f
+        }
+        Log.d("dq-av","mask alpha=$mAlpha")
+        GLES20.glUniform1f(shader.uMaskAlphaLocation, mAlpha)
+
 
         GLES20.glEnable(GLES20.GL_BLEND)
         // 基于源象素alpha通道值的半透明混合函数

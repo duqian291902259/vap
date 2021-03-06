@@ -65,7 +65,8 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
     //private val videoInfo = VideoInfo("vapx-dq.mp4", "8b03ac63d57a14341242d5c629701e79")
     //private val videoInfo = VideoInfo("vapx-dq2.mp4", "19fdbeb986a78c925eed232a1daf0052")//文字遮罩
     //private val videoInfo = VideoInfo("demo-2.mp4", "19fdbeb986a78c925eed232a1daf0052")
-    private val videoInfo = VideoInfo("vap-dq-half-1.mp4", "db7ede9ee7d8e9636eabbbca48ede11a")
+    //private val videoInfo = VideoInfo("vap-dq-half-1.mp4", "db7ede9ee7d8e9636eabbbca48ede11a")
+    private val videoInfo = VideoInfo("dq-cc.mp4", "db7ede9ee7d8e9636eabbbca48ede11a")
 
     // 动画View
     private lateinit var animView: AnimView
@@ -104,7 +105,8 @@ class AnimVapxDemoActivity : Activity(), IAnimListener {
                  */
                 val srcTag = resource.tag
 
-                if (srcTag == "[sImg1]") {//if (srcTag == "[tag1]") { // 此tag是已经写入到动画配置中的tag
+                //if (srcTag == "[sImg1]") {
+                if (srcTag == "tag1") { // 此tag是已经写入到动画配置中的tag
                     val drawableId = if (head1Img) R.drawable.head1 else R.drawable.head2
                     head1Img = !head1Img
                     val options = BitmapFactory.Options()
