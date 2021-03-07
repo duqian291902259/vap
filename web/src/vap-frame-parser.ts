@@ -68,11 +68,13 @@ export default class FrameParser {
 
   parseSrc(dataJson) {
     const src = (this.srcData = {});
+    console.warn("dataJson="+ dataJson)
     return Promise.all(
       (dataJson.src || []).map(async item => {
         item.img = null;
-        if (!this.headData[item.srcTag.slice(1, item.srcTag.length - 1)]) {
-          console.warn(`vap: 融合信息没有传入：${item.srcTag}`);
+        console.warn("item.srcTag="+item.srcTag)
+        if (!this.headData[item.srcTag.slice(1, item.srcTag.length-1)]) {
+          console.warn(`vap: 融合信息没有传入123：${item.srcTag}`);
         } else {
           if (item.srcType === 'txt') {
             item.textStr = item.srcTag.replace(/\[(.*)\]/, ($0, $1) => {

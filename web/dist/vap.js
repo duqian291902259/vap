@@ -828,7 +828,7 @@
   }
   });
 
-  var D__project_vapSource_web_node_modules__babel_runtime_regenerator = runtime_1;
+  var regenerator = runtime_1;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -972,17 +972,6 @@
 
   var possibleConstructorReturn = _possibleConstructorReturn;
 
-  var getPrototypeOf$1 = createCommonjsModule(function (module) {
-  function _getPrototypeOf(o) {
-    module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-
-  module.exports = _getPrototypeOf;
-  });
-
   /*! *****************************************************************************
   Copyright (c) Microsoft Corporation.
 
@@ -1037,8 +1026,8 @@
     createClass(FrameParser, [{
       key: "init",
       value: function init() {
-        return __awaiter(this, void 0, void 0, /*#__PURE__*/D__project_vapSource_web_node_modules__babel_runtime_regenerator.mark(function _callee() {
-          return D__project_vapSource_web_node_modules__babel_runtime_regenerator.wrap(function _callee$(_context) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/regenerator.mark(function _callee() {
+          return regenerator.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
@@ -1108,28 +1097,30 @@
         var _this = this;
 
         var src = this.srcData = {};
+        console.warn("dataJson=" + dataJson);
         return Promise.all((dataJson.src || []).map(function (item) {
-          return __awaiter(_this, void 0, void 0, /*#__PURE__*/D__project_vapSource_web_node_modules__babel_runtime_regenerator.mark(function _callee2() {
+          return __awaiter(_this, void 0, void 0, /*#__PURE__*/regenerator.mark(function _callee2() {
             var _this2 = this;
 
-            return D__project_vapSource_web_node_modules__babel_runtime_regenerator.wrap(function _callee2$(_context2) {
+            return regenerator.wrap(function _callee2$(_context2) {
               while (1) {
                 switch (_context2.prev = _context2.next) {
                   case 0:
                     item.img = null;
+                    console.warn("item.srcTag=" + item.srcTag);
 
                     if (this.headData[item.srcTag.slice(1, item.srcTag.length - 1)]) {
-                      _context2.next = 5;
+                      _context2.next = 6;
                       break;
                     }
 
-                    console.warn("vap: \u878D\u5408\u4FE1\u606F\u6CA1\u6709\u4F20\u5165\uFF1A".concat(item.srcTag));
-                    _context2.next = 21;
+                    console.warn("vap: \u878D\u5408\u4FE1\u606F\u6CA1\u6709\u4F20\u5165123\uFF1A".concat(item.srcTag));
+                    _context2.next = 22;
                     break;
 
-                  case 5:
+                  case 6:
                     if (!(item.srcType === 'txt')) {
-                      _context2.next = 10;
+                      _context2.next = 11;
                       break;
                     }
 
@@ -1137,42 +1128,42 @@
                       return _this2.headData[$1];
                     });
                     item.img = this.makeTextImg(item);
-                    _context2.next = 20;
+                    _context2.next = 21;
                     break;
 
-                  case 10:
+                  case 11:
                     if (!(item.srcType === 'img')) {
-                      _context2.next = 20;
+                      _context2.next = 21;
                       break;
                     }
 
                     item.imgUrl = item.srcTag.replace(/\[(.*)\]/, function ($0, $1) {
                       return _this2.headData[$1];
                     });
-                    _context2.prev = 12;
-                    _context2.next = 15;
+                    _context2.prev = 13;
+                    _context2.next = 16;
                     return this.loadImg(item.imgUrl + '?t=' + Date.now());
 
-                  case 15:
+                  case 16:
                     item.img = _context2.sent;
-                    _context2.next = 20;
+                    _context2.next = 21;
                     break;
 
-                  case 18:
-                    _context2.prev = 18;
-                    _context2.t0 = _context2["catch"](12);
+                  case 19:
+                    _context2.prev = 19;
+                    _context2.t0 = _context2["catch"](13);
 
-                  case 20:
+                  case 21:
                     if (item.img) {
                       src[item.srcId] = item;
                     }
 
-                  case 21:
+                  case 22:
                   case "end":
                     return _context2.stop();
                 }
               }
-            }, _callee2, this, [[12, 18]]);
+            }, _callee2, this, [[13, 19]]);
           }));
         }));
       }
@@ -1540,7 +1531,7 @@
     return VapVideo;
   }();
 
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf$1(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf$1(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn(this, result); }; }
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn(this, result); }; }
 
   function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
   var clearTimer = null;
@@ -1583,8 +1574,8 @@
     createClass(WebglRenderVap, [{
       key: "init",
       value: function init() {
-        return __awaiter(this, void 0, void 0, /*#__PURE__*/D__project_vapSource_web_node_modules__babel_runtime_regenerator.mark(function _callee() {
-          return D__project_vapSource_web_node_modules__babel_runtime_regenerator.wrap(function _callee$(_context) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/regenerator.mark(function _callee() {
+          return regenerator.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
@@ -1719,7 +1710,8 @@
 
           sourceUniform = "\n            ".concat(samplers.join('\n'), "\n            uniform float image_pos[").concat(textureSize * PER_SIZE, "];\n            vec4 getSampleFromArray(int ndx, vec2 uv) {\n                vec4 color;\n                ").concat(imgColor.join(' else '), "\n                return color;\n            }\n            ");
           sourceTexure = "\n            vec4 srcColor,maskColor;\n            vec2 srcTexcoord,maskTexcoord;\n            int srcIndex;\n            float x1,x2,y1,y2,mx1,mx2,my1,my2; //\u663E\u793A\u7684\u533A\u57DF\n\n            for(int i=0;i<".concat(textureSize * PER_SIZE, ";i+= ").concat(PER_SIZE, "){\n                if ((int(image_pos[i]) > 0)) {\n                  srcIndex = int(image_pos[i]);\n    \n                    x1 = image_pos[i+1];\n                    x2 = image_pos[i+2];\n                    y1 = image_pos[i+3];\n                    y2 = image_pos[i+4];\n                    \n                    mx1 = image_pos[i+5];\n                    mx2 = image_pos[i+6];\n                    my1 = image_pos[i+7];\n                    my2 = image_pos[i+8];\n    \n    \n                    if (v_texcoord.s>x1 && v_texcoord.s<x2 && v_texcoord.t>y1 && v_texcoord.t<y2) {\n                        srcTexcoord = vec2((v_texcoord.s-x1)/(x2-x1),(v_texcoord.t-y1)/(y2-y1));\n                         maskTexcoord = vec2(mx1+srcTexcoord.s*(mx2-mx1),my1+srcTexcoord.t*(my2-my1));\n                         srcColor = getSampleFromArray(srcIndex,srcTexcoord);\n                         maskColor = texture2D(u_image_video, maskTexcoord);\n                         srcColor.a = srcColor.a*(maskColor.r);\n                      \n                         bgColor = vec4(srcColor.rgb*srcColor.a,srcColor.a) + (1.0-srcColor.a)*bgColor;\n                      \n                    }   \n                }\n            }\n            ");
-        }
+        } // srcColor.a = srcColor.a*(maskColor.r);
+
 
         var fragmentSharder = "\n        precision lowp float;\n        varying vec2 v_texcoord;\n        varying vec2 v_alpha_texCoord;\n        uniform sampler2D u_image_video;\n        ".concat(sourceUniform, "\n        \n        void main(void) {\n            vec4 bgColor = ").concat(bgColor, "\n            ").concat(sourceTexure, "\n            // bgColor = texture2D(u_image[0], v_texcoord);\n            gl_FragColor = bgColor;\n        }\n        ");
         return createShader(gl, gl.FRAGMENT_SHADER, fragmentSharder);
@@ -1813,7 +1805,7 @@
         var gl = this.instance.gl;
 
         if (!gl) {
-          get(getPrototypeOf$1(WebglRenderVap.prototype), "drawFrame", this).call(this);
+          get(getPrototypeOf(WebglRenderVap.prototype), "drawFrame", this).call(this);
 
           return;
         }
@@ -1861,7 +1853,7 @@
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        get(getPrototypeOf$1(WebglRenderVap.prototype), "drawFrame", this).call(this);
+        get(getPrototypeOf(WebglRenderVap.prototype), "drawFrame", this).call(this);
       }
     }, {
       key: "destroy",
@@ -1881,7 +1873,7 @@
         } // glUtil.cleanWebGL(gl, this.shaders, this.program, this.textures, this.buffers)
 
 
-        get(getPrototypeOf$1(WebglRenderVap.prototype), "destroy", this).call(this);
+        get(getPrototypeOf(WebglRenderVap.prototype), "destroy", this).call(this);
 
         this.clearMemoryCache();
       }

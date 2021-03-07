@@ -202,6 +202,7 @@ export default class WebglRenderVap extends VapVideo {
             }
             `;
     }
+    // srcColor.a = srcColor.a*(maskColor.r);
 
     const fragmentSharder = `
         precision lowp float;
