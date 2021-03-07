@@ -32,7 +32,7 @@ class MixShader {
                 "    gl_Position = a_Position;\n" +
                 "}"
 
-        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.取遮罩图片的颜色，遮罩的alpha值:1--> srcRgba.a * maskRgba.r,  2-->srcRgbaCal.a  3,srcRgba.a *  todo-dq 因为缺少了遮罩的透明度信息，所以可以在视频的argb通道里面存储遮罩的透明度信息
+        //step:It returns 0.0 if x < edge and 1.0 if x >= edge.取遮罩图片的颜色，遮罩的alpha值:1--> srcRgba.a * maskRgba.r,  2-->srcRgbaCal.a  3,srcRgba.a *u_mask_alpha  todo-dq 因为缺少了遮罩的透明度信息，所以可以在视频的argb通道里面存储遮罩的透明度信息
         //头像纹理srcRgba，遮罩纹理（视频右边部分的遮罩），文字颜色填充有rgb
         private const val FRAGMENT = "#extension GL_OES_EGL_image_external : require\n" +
                 "precision mediump float; \n" +
@@ -49,7 +49,7 @@ class MixShader {
                 "    vec4 maskRgba = texture2D(u_TextureMaskUnit, v_TextureMaskCoordinates);\n" +
                 "    float isFill = step(0.5, float(u_isFill));\n" +
                 "    vec4 srcRgbaCal = isFill * vec4(u_Color.r, u_Color.g, u_Color.b, srcRgba.a) + (1.0 - isFill) * srcRgba;\n" +
-                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgbaCal.a*u_mask_alpha);\n" +
+                "    gl_FragColor = vec4(srcRgbaCal.r, srcRgbaCal.g, srcRgbaCal.b, srcRgbaCal.a*maskRgba.r);\n" +
                 "}"
 
         // Uniform constants

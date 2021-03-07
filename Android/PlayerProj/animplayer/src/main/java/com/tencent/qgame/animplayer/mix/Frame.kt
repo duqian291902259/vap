@@ -41,7 +41,7 @@ class Frame(val index: Int, json: JSONObject) {
         mFrame = PointRect(m.getInt(0), m.getInt(1), m.getInt(2), m.getInt(3))
 
         mt = json.getInt("mt")
-        mAlpha = json.getDouble("mAlpha")
+        //mAlpha = json.getDouble("mAlpha")
     }
 }
 
