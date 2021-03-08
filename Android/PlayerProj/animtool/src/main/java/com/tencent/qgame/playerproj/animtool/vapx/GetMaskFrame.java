@@ -143,7 +143,7 @@ public class GetMaskFrame {
         //TLog.i(TAG, "frameIndex=" + frameIndex + ",mFrame2=" + frame.mFrame);
         frame.mFrame = mFrame;
         //try {
-        //fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame,frame);
+        fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame,frame);
         /*} catch (Exception e) {
             e.printStackTrace();
             TLog.e(TAG, "dq-av error=" + e);
@@ -178,7 +178,9 @@ public class GetMaskFrame {
                 int redAlpha = 255 - maskRed; // 红色部分算遮挡
                 alpha = (int) ((redAlpha / 255f) * (alpha / 255f) * 255f);
                 // 最终color
-                int color = 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
+                //int colorG = alpha << 8;
+                int colorG = 20 << 8;
+                int color = 0xff000000 + (alpha << 16) + colorG + alpha;
                 maskColor2 = color;
                 // 将遮罩颜色放置到视频中对应区域
                 int outputXOffset = mFrame.x;

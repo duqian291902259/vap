@@ -118,6 +118,7 @@ public class GetAlphaFrame {
                 outX = point.x + x;
                 int color = inputArgb[x + y * inputW];
                 outputArgb[outX + outY * outputW] = isAlpha ? getAlpha(color) : getColor(color);
+                // TODO: 2021/3/8 位于遮罩区域的颜色直接用遮罩的颜色
                 //outputArgb[outX + outY * outputW] = isAlpha ? getColor(color) : getColor(color);
             }
         }
@@ -129,8 +130,10 @@ public class GetAlphaFrame {
 
     private int getAlpha(int color) {
         int alpha = color >>> 24;
+        int g = color >>> 8;
         // r = g = b
         return 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
+        //return 0xff000000 + (alpha << 16) + g + alpha;
     }
 
     private int blendBg(int color, int colorBg) {
