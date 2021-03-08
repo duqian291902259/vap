@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class CommonArgTool {
 
     private static final String TAG = "CommonArgTool";
-    private static final int MIN_GAP = 0; // 元素最小间隙 防止编码与光栅化导致边界模糊问题
+    public static final int MIN_GAP = 0; // 元素最小间隙 防止编码与光栅化导致边界模糊问题
     public static final float VIDEO_SCALE_RATIO = 1f; // 视频缩小的比例，防止视频宽高超出1504导致绿屏
 
     /**
