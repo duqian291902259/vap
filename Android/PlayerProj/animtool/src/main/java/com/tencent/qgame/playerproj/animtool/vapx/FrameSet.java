@@ -62,7 +62,7 @@ public class FrameSet {
         public int mt = 0; // 旋转角度 目前只支持0
         public PointRect frame = new PointRect(); // src位置
         public PointRect mFrame = new PointRect(); // 遮罩区域
-        public float mAlpha = 0;//遮罩的alpha值，0-255传递，后面转换下
+        //public float mAlpha = 0;//遮罩的alpha值，0-255传递，后面转换下
 
         @Override
         public String toString() {
@@ -71,8 +71,8 @@ public class FrameSet {
                 "\"z\":" + z + "," +
                 "\"frame\":" + frame.toString() + "," +
                 "\"mFrame\":" + mFrame.toString() + "," +
-                "\"mt\":" + mt + "," +
-                "\"mAlpha\":" + mAlpha +
+                "\"mt\":" + mt +//+ "," +
+                //"\"mAlpha\":" + mAlpha +
                 "}";
         }
     }

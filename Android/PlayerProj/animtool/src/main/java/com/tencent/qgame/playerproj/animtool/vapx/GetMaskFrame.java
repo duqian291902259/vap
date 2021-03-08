@@ -77,6 +77,7 @@ public class GetMaskFrame {
         frame.srcId = src.srcId;
         frame.z = src.z;
 
+        //从图片中获取遮罩的位置
         frame.frame = getSrcFramePoint(maskArgb, maskW, maskH,frame);
         //TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame+",mAlpha="+frame.mAlpha);
 
@@ -84,6 +85,15 @@ public class GetMaskFrame {
             // 有文件，但内容是空
             return null;
         }
+
+        //这里取颜色才是对的
+        PointRect maskPoint = new PointRect(
+                frame.frame.x,
+                frame.frame.y,
+                frame.frame.w,
+                frame.frame.h
+        );
+
         //等比例缩小遮罩的坐标位置
         frame.frame.x = (int) (frame.frame.x * CommonArgTool.VIDEO_SCALE_RATIO);
         frame.frame.y = (int) (frame.frame.y * CommonArgTool.VIDEO_SCALE_RATIO);
@@ -92,12 +102,11 @@ public class GetMaskFrame {
 
         //TLog.i(TAG, "frameIndex=" + frameIndex + ",frame.frame=" +frame.frame);
 
-        PointRect maskPoint = new PointRect(
-            frame.frame.x,
-            frame.frame.y,
-            frame.frame.w,
-            frame.frame.h
-        );
+
+        //处理遮罩实际的坐标点
+        x = frame.frame.x + CommonArgTool.MIN_GAP + outW / 2;
+        y = frame.frame.y;
+
 
         PointRect mFrame = new PointRect(x, y, frame.frame.w, frame.frame.h);
         //TLog.i(TAG, "frameIndex=" + frameIndex + ",maskPoint=" + maskPoint + ",mFrame1=" + mFrame);
@@ -129,22 +138,63 @@ public class GetMaskFrame {
             TLog.e(TAG, "frameIndex=" + frameIndex + ",src=" + src.srcId + ", no more space(h)" + mFrame);
             return null;
         }
-        frame.mFrame = mFrame;
+
         */
         //TLog.i(TAG, "frameIndex=" + frameIndex + ",mFrame2=" + frame.mFrame);
-
-        fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame,frame);
+        frame.mFrame = mFrame;
+        //try {
+        //fillMaskToOutput(outputArgb, outW, maskArgb, maskW, maskPoint, frame.mFrame,frame);
+        /*} catch (Exception e) {
+            e.printStackTrace();
+            TLog.e(TAG, "dq-av error=" + e);
+        }*/
 
         // 设置src的w,h 取所有遮罩里最大值
-        synchronized (GetMaskFrame.class) {
+        /*synchronized (GetMaskFrame.class) {
             // 只按宽度进行判断防止横跳
             if (frame.frame.w > src.w) {
                 src.w = frame.frame.w;
                 src.h = frame.frame.h;//dq-modified:不取mFrame里面的
             }
-        }
+        }*/
         return frame;
     }
+
+    private void fillMaskToOutput(int[] outputArgb, int outW,
+                                  int[] maskArgb, int maskW,
+                                  PointRect maskPoint,
+                                  PointRect mFrame, Frame frame1) {
+        int maskColor2 = 0;
+
+        for (int y=0; y < maskPoint.h; y++) {
+            for (int x=0; x < maskPoint.w; x++) {
+                int maskXOffset = maskPoint.x;
+                int maskYOffset = maskPoint.y;
+                // 先从遮罩 maskArgb 取色
+                int maskColor = maskArgb[x + maskXOffset + (y + maskYOffset) * maskW];
+                // 黑色部分不遮挡，红色部分被遮挡
+                int alpha = maskColor >>> 24;
+                int maskRed = (maskColor & 0x00ff0000) >>> 16;
+                int redAlpha = 255 - maskRed; // 红色部分算遮挡
+                alpha = (int) ((redAlpha / 255f) * (alpha / 255f) * 255f);
+                // 最终color
+                int color = 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
+                maskColor2 = color;
+                // 将遮罩颜色放置到视频中对应区域
+                int outputXOffset = mFrame.x;
+                int outputYOffset = mFrame.y;
+                outputArgb[x + outputXOffset + (y + outputYOffset) * outW] = color;
+            }
+        }
+        /*float[] transColor = transColor(maskColor2);
+        float alpha1 = transColor[1];
+        float alpha2 = transColor[2];
+        float alpha3 = transColor[3];
+        TLog.i("dq-av", "maskColor2=" + maskColor2 + ",alpha=" + alpha1 + ",alpha2=" + alpha2 + ",alpha3=" + alpha3);
+        //frame1.mAlpha = (int) (alpha1*255);
+        frame1.mAlpha = alpha1;*/
+    }
+
 
     /**
      * 缩放遮罩
@@ -214,42 +264,6 @@ public class GetMaskFrame {
         int alpha =color;
         // r = g = b
         return 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
-    }
-
-
-    private void fillMaskToOutput(int[] outputArgb, int outW,
-        int[] maskArgb, int maskW,
-        PointRect frame,
-        PointRect mFrame, Frame frame1) {
-        int maskColor2 = 0;
-
-        for (int y=0; y < frame.h; y++) {
-            for (int x=0; x < frame.w; x++) {
-                int maskXOffset = frame.x;
-                int maskYOffset = frame.y;
-                // 先从遮罩 maskArgb 取色
-                int maskColor = maskArgb[x + maskXOffset + (y + maskYOffset) * maskW];
-                // 黑色部分不遮挡，红色部分被遮挡
-                int alpha = maskColor >>> 24;
-                int maskRed = (maskColor & 0x00ff0000) >>> 16;
-                int redAlpha = 255 - maskRed; // 红色部分算遮挡
-                alpha = (int) ((redAlpha / 255f) * (alpha / 255f) * 255f);
-                // 最终color
-                int color = 0xff000000 + (alpha << 16) + (alpha << 8) + alpha;
-                maskColor2 = color;
-                // 将遮罩颜色放置到视频中对应区域
-                /*int outputXOffset = mFrame.x;
-                int outputYOffset = mFrame.y;
-                outputArgb[x + outputXOffset + (y + outputYOffset) * outW] = color;*/
-            }
-        }
-        float[] transColor = transColor(maskColor2);
-        float alpha1 = transColor[1];
-        float alpha2 = transColor[2];
-        float alpha3 = transColor[3];
-        TLog.i("dq-av", "maskColor2=" + maskColor2 + ",alpha=" + alpha1 + ",alpha2=" + alpha2 + ",alpha3=" + alpha3);
-        //frame1.mAlpha = (int) (alpha1*255);
-        frame1.mAlpha = alpha1;
     }
 
 

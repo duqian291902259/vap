@@ -118,6 +118,7 @@ public class GetAlphaFrame {
                 outX = point.x + x;
                 int color = inputArgb[x + y * inputW];
                 outputArgb[outX + outY * outputW] = isAlpha ? getAlpha(color) : getColor(color);
+                //outputArgb[outX + outY * outputW] = isAlpha ? getColor(color) : getColor(color);
             }
         }
     }
