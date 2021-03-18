@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
@@ -13,40 +15,62 @@ import java.util.Locale;
  */
 public class FileUtils {
 
-    public static void renameRes(String maskPath, String pngPath) {
-        try {
-            renameFileInRootDir(maskPath);
-            renameFileInRootDir(pngPath);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void renameImages(String rootDir) {
+        File file = new File(rootDir);
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    String imageDir = f.getAbsolutePath();
+                    System.out.println("imageDir = " + imageDir);
+                    renameFileInRootDir(imageDir);
+                }
+            }
         }
     }
 
-    private static void renameFileInRootDir(String rootFilePath) {
-        File rootFile = new File(rootFilePath);
-        if (rootFile.isDirectory()) {
-            String[] list = rootFile.list();
-            if (list == null || list.length == 0) {
-                return;
-            }
-            for (int i = 0; i < list.length; i++) {
-                //这个路径是没有根目录的
-                String currentPath = list[i];
-                String currentFileName = currentPath;
-                int length = currentFileName.length();
-                String extension = currentFileName.substring(currentFileName.lastIndexOf("."), length);
-                String newFileName = formatName(i) + extension;
-                String newPath = rootFilePath + File.separator + File.separator + newFileName;
-                File currentFile = new File(rootFilePath + File.separator + currentPath);
-                boolean renameTo = currentFile.renameTo(new File(newPath));
-                System.out.println("newPath=" + newPath + ",renameTo=" + renameTo);
+    public static void renameImages(String... imagePath) {
+        //当作数组用foreach遍历
+        for (String path : imagePath) {
+            System.out.println("imagePath = " + path);
+            renameFileInRootDir(path);
+        }
+    }
 
-                //重命名失败，那就拷贝吧
-                if (!renameTo) {
-                    boolean copyFile = copyFile(currentFile, newPath);
-                    System.out.println("newPath=" + newPath + ",copyFile=" + copyFile);
+    public static void renameRes(String maskPath, String pngPath) {
+        renameFileInRootDir(maskPath);
+        renameFileInRootDir(pngPath);
+    }
+
+    public static void renameFileInRootDir(String rootFilePath) {
+        try {
+            File rootFile = new File(rootFilePath);
+            if (rootFile.isDirectory()) {
+                String[] list = rootFile.list();
+                if (list == null || list.length == 0) {
+                    return;
+                }
+                for (int i = 0; i < list.length; i++) {
+                    //这个路径是没有根目录的
+                    String currentPath = list[i];
+                    String currentFileName = currentPath;
+                    int length = currentFileName.length();
+                    String extension = currentFileName.substring(currentFileName.lastIndexOf("."), length);
+                    String newFileName = formatName(i) + extension;
+                    String newPath = rootFilePath + File.separator + File.separator + newFileName;
+                    File currentFile = new File(rootFilePath + File.separator + currentPath);
+                    boolean renameTo = currentFile.renameTo(new File(newPath));
+                    System.out.println("newPath=" + newPath + ",renameTo=" + renameTo);
+
+                    //重命名失败，那就拷贝吧
+                    if (!renameTo) {
+                        boolean copyFile = copyFile(currentFile, newPath);
+                        System.out.println("newPath=" + newPath + ",copyFile=" + copyFile);
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         //dq:素材重命名工具
-        //runRenameRes();
+        runRenameRes();
 
         // 启动UI界面
         new ToolUI().run();
@@ -42,9 +42,11 @@ public class Main {
     }
 
     private static void runRenameRes() {
-        String maskPath = "D:\\NetEase\\UI\\cc_mp4_pic\\mask";
+        /*String maskPath = "D:\\NetEase\\UI\\cc_mp4_pic\\mask";
         String pngPath = "D:\\NetEase\\UI\\cc_mp4_pic\\png";
-        FileUtils.renameRes(maskPath,pngPath);
+        FileUtils.renameRes(maskPath,pngPath);*/
+        String pngPath = "C:\\Users\\N20241\\Pictures\\Mp4视频特效\\透明动画素材文件-遮罩-cc";
+        FileUtils.renameImages(pngPath);
     }
 
 
